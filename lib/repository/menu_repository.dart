@@ -1,4 +1,3 @@
-
 import 'package:restaurant_menu/models/menu_item.dart';
 
 class MenuRepository {

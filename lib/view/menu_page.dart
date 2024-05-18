@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../ViewModel/menu_view_model.dart';
-import '../Model/menu_item.dart';
+import 'package:restaurant_menu/models/menu_item.dart';
+import 'package:restaurant_menu/viewmodel/menu_view_model.dart';
+import 'cart_page.dart'; // Import CartPage
 
 class MenuPage extends StatelessWidget {
   @override
@@ -11,6 +12,17 @@ class MenuPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Restaurant Menu'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.shopping_cart),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => CartPage()),
+              );
+            },
+          ),
+        ],
       ),
       body: ListView.builder(
         itemCount: viewModel.menuItems.length,
@@ -40,7 +52,7 @@ class MenuItemDetailDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<MenuViewModel>(
       builder: (context, viewModel, child) {
-        bool isInCart = viewModel.isInCart(menuItem);
+        int quantity = viewModel.getCartQuantity(menuItem);
 
         return AlertDialog(
           title: Text(menuItem.name),
@@ -57,6 +69,26 @@ class MenuItemDetailDialog extends StatelessWidget {
                 '\$${menuItem.price.toStringAsFixed(2)}',
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
+              SizedBox(height: 16),
+              Row(
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.remove),
+                    onPressed: quantity > 0
+                        ? () {
+                            viewModel.removeFromCart(menuItem);
+                          }
+                        : null,
+                  ),
+                  Text('$quantity'),
+                  IconButton(
+                    icon: Icon(Icons.add),
+                    onPressed: () {
+                      viewModel.addToCart(menuItem);
+                    },
+                  ),
+                ],
+              ),
             ],
           ),
           actions: [
@@ -66,21 +98,6 @@ class MenuItemDetailDialog extends StatelessWidget {
               },
               child: Text('Close'),
             ),
-            isInCart
-                ? TextButton(
-                    onPressed: () {
-                      viewModel.removeFromCart(menuItem);
-                      Navigator.of(context).pop();
-                    },
-                    child: Text('Remove from Cart'),
-                  )
-                : ElevatedButton(
-                    onPressed: () {
-                      viewModel.addToCart(menuItem);
-                      Navigator.of(context).pop();
-                    },
-                    child: Text('Add to Cart'),
-                  ),
           ],
         );
       },
