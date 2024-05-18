@@ -87,6 +87,11 @@ class MenuItemDetailDialog extends StatelessWidget {
                             }
                           : null,
                       child: Text('Add to Cart'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: quantity > 0
+                            ? Theme.of(context).primaryColor
+                            : Colors.grey,
+                      ),
                     ),
                   ),
                 ],

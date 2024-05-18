@@ -1,6 +1,6 @@
-// main.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sizer/sizer.dart';
 import 'viewmodel/menu_view_model.dart';
 import 'view/menu_page.dart';
 
@@ -8,7 +8,11 @@ void main() {
   runApp(
     ChangeNotifierProvider(
       create: (context) => MenuViewModel(),
-      child: RestaurantMenuApp(),
+      child: Sizer(
+        builder: (context, orientation, deviceType) {
+          return RestaurantMenuApp();
+        },
+      ),
     ),
   );
 }
