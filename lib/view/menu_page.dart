@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:restaurant_menu/models/menu_item.dart';
+import 'package:restaurant_menu/view/menu_item_detail_page.dart';
 import 'package:restaurant_menu/viewmodel/menu_view_model.dart';
 import 'cart_page.dart'; // Import CartPage
 
@@ -24,83 +25,91 @@ class MenuPage extends StatelessWidget {
           ),
         ],
       ),
-      body: ListView.builder(
+      body: GridView.builder(
+        padding: EdgeInsets.all(10),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          crossAxisSpacing: 10,
+          mainAxisSpacing: 10,
+          childAspectRatio: 3 / 2,
+        ),
         itemCount: viewModel.menuItems.length,
         itemBuilder: (context, index) {
-          return ListTile(
-            title: Text(viewModel.menuItems[index].name),
-            subtitle: Text('\$${viewModel.menuItems[index].price.toStringAsFixed(2)}'),
+          final menuItem = viewModel.menuItems[index];
+          return InkWell(
             onTap: () {
               showDialog(
                 context: context,
-                builder: (context) => MenuItemDetailDialog(menuItem: viewModel.menuItems[index]),
+                builder: (context) => MenuItemDetailDialog(menuItem: menuItem),
               );
             },
+            child: Card(
+              elevation: 5,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+              child: Padding(
+                padding: EdgeInsets.all(10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            flex: 2,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  menuItem.name,
+                                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                ),
+                                SizedBox(height: 5),
+                                Text(
+                                  'Rs. ${menuItem.price.toStringAsFixed(2)}',
+                                  style: TextStyle(fontSize: 16, color: Colors.grey[700]),
+                                ),
+                                SizedBox(height: 5),
+                                Text(
+                                  menuItem.description,
+                                  style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(width: 10),
+                          Expanded(
+                            flex: 1,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(15),
+                              child: Image.network(
+                                menuItem.imageUrl,
+                                height: 80,
+                                width: 80,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: IconButton(
+                        icon: Icon(Icons.add_circle, color: Theme.of(context).primaryColor),
+                        onPressed: () {
+                          viewModel.addToCart(menuItem);
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
           );
         },
       ),
-    );
-  }
-}
-
-class MenuItemDetailDialog extends StatelessWidget {
-  final MenuItem menuItem;
-
-  MenuItemDetailDialog({required this.menuItem});
-
-  @override
-  Widget build(BuildContext context) {
-    return Consumer<MenuViewModel>(
-      builder: (context, viewModel, child) {
-        int quantity = viewModel.getCartQuantity(menuItem);
-
-        return AlertDialog(
-          title: Text(menuItem.name),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                menuItem.description,
-                style: TextStyle(fontSize: 16),
-              ),
-              SizedBox(height: 16),
-              Text(
-                '\$${menuItem.price.toStringAsFixed(2)}',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 16),
-              Row(
-                children: [
-                  IconButton(
-                    icon: Icon(Icons.remove),
-                    onPressed: quantity > 0
-                        ? () {
-                            viewModel.removeFromCart(menuItem);
-                          }
-                        : null,
-                  ),
-                  Text('$quantity'),
-                  IconButton(
-                    icon: Icon(Icons.add),
-                    onPressed: () {
-                      viewModel.addToCart(menuItem);
-                    },
-                  ),
-                ],
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text('Close'),
-            ),
-          ],
-        );
-      },
     );
   }
 }
