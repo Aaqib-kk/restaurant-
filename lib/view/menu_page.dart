@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:restaurant_menu/models/menu_item.dart';
 import '../ViewModel/menu_view_model.dart';
+import '../Model/menu_item.dart';
 
 class MenuPage extends StatelessWidget {
   @override

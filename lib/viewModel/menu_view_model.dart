@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:restaurant_menu/models/menu_item.dart';
-import 'package:restaurant_menu/repository/menu_repository.dart';
+import '../Repository/menu_repository.dart';
 
 class MenuViewModel extends ChangeNotifier {
   final MenuRepository _menuRepository = MenuRepository();
