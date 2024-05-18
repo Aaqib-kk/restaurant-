@@ -26,7 +26,7 @@ class RestaurantMenuApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: MenuPage(),
-      debugShowCheckedModeBanner: false, // Remove debug banner
+      debugShowCheckedModeBanner: false,
     );
   }
 }

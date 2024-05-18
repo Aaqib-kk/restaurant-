@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:restaurant_menu/models/menu_item.dart';
-import 'package:restaurant_menu/repository/menu_repository.dart';
+import 'package:restaurant_menu/repository/menu_repo.dart';
 
 class MenuViewModel extends ChangeNotifier {
   final MenuRepository _menuRepository = MenuRepository();
@@ -14,8 +14,12 @@ class MenuViewModel extends ChangeNotifier {
   List<MenuItem> get menuItems => _menuItems;
   List<MapEntry<MenuItem, int>> get cartItems => _cartItems.entries.toList();
 
-  void fetchMenuItems() {
-    _menuItems = _menuRepository.fetchMenuItems();
+  Future<void> fetchMenuItems() async {
+    try {
+      _menuItems = await _menuRepository.getMenu();
+    } catch (e) {
+      _menuItems = []; // If there's an error, set menu items to an empty list
+    }
     notifyListeners();
   }
 

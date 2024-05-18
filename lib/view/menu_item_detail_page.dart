@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:restaurant_menu/models/menu_item.dart';
 import 'package:restaurant_menu/viewmodel/menu_view_model.dart';
+import 'package:sizer/sizer.dart';
 
 class MenuItemDetailDialog extends StatelessWidget {
   final MenuItem menuItem;
@@ -18,14 +19,14 @@ class MenuItemDetailDialog extends StatelessWidget {
 
           return SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: EdgeInsets.all(3.w),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Align(
                     alignment: Alignment.topRight,
                     child: IconButton(
-                      icon: Icon(Icons.close),
+                      icon: Icon(Icons.close, size: 6.w),
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
@@ -35,49 +36,54 @@ class MenuItemDetailDialog extends StatelessWidget {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(15),
                       child: Image.network(
-                        menuItem.imageUrl,
-                        height: 200,
+                        menuItem.imageUrl ?? '',
+                        height: 30.h,
                         width: double.infinity,
                         fit: BoxFit.cover,
                       ),
                     ),
                   ),
-                  SizedBox(height: 16),
+                  SizedBox(height: 2.h),
                   Text(
-                    menuItem.name,
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                    menuItem.name ?? '',
+                    style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(height: 8),
+                  SizedBox(height: 1.h),
                   Text(
-                    'Rs. ${menuItem.price.toStringAsFixed(2)}',
-                    style: TextStyle(fontSize: 20, color: Colors.grey[700]),
+                    'Rs. ${menuItem.price?.toStringAsFixed(2) ?? 'N/A'}',
+                    style: TextStyle(fontSize: 18.sp, color: Colors.grey[700]),
                   ),
-                  SizedBox(height: 8),
+                  SizedBox(height: 1.h),
                   Text(
-                    menuItem.description,
-                    style: TextStyle(fontSize: 16, color: Colors.grey[600]),
+                    menuItem.description ?? '',
+                    style: TextStyle(fontSize: 16.sp, color: Colors.grey[600]),
                   ),
-                  SizedBox(height: 16),
+                  SizedBox(height: 1.h),
+                  Text(
+                    menuItem.category ?? '',
+                    style: TextStyle(fontSize: 16.sp, color: Colors.grey[600]),
+                  ),
+                  SizedBox(height: 2.h),
                   Row(
                     children: [
                       IconButton(
-                        icon: Icon(Icons.remove),
+                        icon: Icon(Icons.remove, size: 6.w),
                         onPressed: quantity > 0
                             ? () {
                                 viewModel.removeFromCart(menuItem);
                               }
                             : null,
                       ),
-                      Text('$quantity', style: TextStyle(fontSize: 18)),
+                      Text('$quantity', style: TextStyle(fontSize: 18.sp)),
                       IconButton(
-                        icon: Icon(Icons.add),
+                        icon: Icon(Icons.add, size: 6.w),
                         onPressed: () {
                           viewModel.addToCart(menuItem);
                         },
                       ),
                     ],
                   ),
-                  SizedBox(height: 16),
+                  SizedBox(height: 2.h),
                   Center(
                     child: ElevatedButton(
                       onPressed: quantity > 0
@@ -86,7 +92,7 @@ class MenuItemDetailDialog extends StatelessWidget {
                               Navigator.of(context).pop();
                             }
                           : null,
-                      child: Text('Add to Cart'),
+                      child: Text('Add to Cart', style: TextStyle(fontSize: 14.sp)),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: quantity > 0
                             ? Theme.of(context).primaryColor
