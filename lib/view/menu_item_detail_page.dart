@@ -46,7 +46,8 @@ class MenuItemDetailDialog extends StatelessWidget {
                   SizedBox(height: 2.h),
                   Text(
                     menuItem.name ?? '',
-                    style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold),
+                    style:
+                        TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: 1.h),
                   Text(
@@ -92,12 +93,13 @@ class MenuItemDetailDialog extends StatelessWidget {
                               Navigator.of(context).pop();
                             }
                           : null,
-                      child: Text('Add to Cart', style: TextStyle(fontSize: 14.sp)),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: quantity > 0
-                            ? Theme.of(context).primaryColor
+                            ? Theme.of(context).cardColor
                             : Colors.grey,
                       ),
+                      child: Text('Add to Cart',
+                          style: TextStyle(fontSize: 14.sp)),
                     ),
                   ),
                 ],
