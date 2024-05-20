@@ -9,7 +9,11 @@ class AdminRepository {
 
   Future<bool> loginAdmin(dynamic data) async {
     try {
-      final response = await _apiServices.post(AppUrl.adminLogin, data);
+      final response = await _apiServices.post(
+        AppUrl.adminLogin,
+        data,
+        headers: {},  // Provide an empty headers map
+      );
       Map<String, dynamic> jsonResponse = jsonDecode(response);
       String token = jsonResponse['token'];
 

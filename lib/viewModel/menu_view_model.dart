@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:restaurant_menu/models/menu_item.dart';
 import 'package:restaurant_menu/repository/menu_repo.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:typed_data';
 
 class MenuViewModel extends ChangeNotifier {
   final MenuRepository _menuRepository = MenuRepository();
@@ -48,5 +50,46 @@ class MenuViewModel extends ChangeNotifier {
 
   int getCartQuantity(MenuItem menuItem) {
     return _cartItems[menuItem] ?? 0;
+  }
+
+  Future<void> createMenuItem(MenuItem menuItem) async {
+    try {
+      await _menuRepository.createMenuItem(menuItem);
+      fetchMenuItems();
+    } catch (e) {
+      // Handle the error
+    }
+  }
+
+  Future<void> updateMenuItem(MenuItem menuItem) async {
+    try {
+      await _menuRepository.updateMenuItem(menuItem);
+      fetchMenuItems();
+    } catch (e) {
+      // Handle the error
+    }
+  }
+
+  Future<void> deleteMenuItem(String menuItemId) async {
+    try {
+      await _menuRepository.deleteMenuItem(menuItemId);
+      fetchMenuItems();
+    } catch (e) {
+      // Handle the error
+    }
+  }
+
+  Future<String> uploadImage(Uint8List imageBytes) async {
+    try {
+      return await _menuRepository.uploadImage(imageBytes);
+    } catch (e) {
+      // Handle the error
+      rethrow;
+    }
+  }
+
+  Future<void> logoutAdmin() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove('admin_token');
   }
 }

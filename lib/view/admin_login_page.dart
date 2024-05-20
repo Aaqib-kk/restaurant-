@@ -60,13 +60,10 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
                             passwordController.text,
                           );
                           if (success) {
-                            Navigator.pushReplacementNamed(
-                                context, '/admin-menu-management');
+                            Navigator.pushReplacementNamed(context, '/admin-menu-management');
                           } else {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                  content: Text(viewModel.errorMessage ??
-                                      'Login failed')),
+                              SnackBar(content: Text(viewModel.errorMessage ?? 'Login failed')),
                             );
                           }
                         },

@@ -19,11 +19,12 @@ class NetworkApiService extends BaseApiServices {
   }
 
   @override
-  Future post(String url, body) async {
+  Future post(String url, dynamic body,
+      {required Map<String, String> headers}) async {
     dynamic responseJson;
     try {
       final response = await http
-          .post(Uri.parse(url), body: body)
+          .post(Uri.parse(url), body: body, headers: headers)
           .timeout(const Duration(seconds: 10));
       responseJson = _returnResponse(response);
     } on SocketException {
@@ -33,11 +34,12 @@ class NetworkApiService extends BaseApiServices {
   }
 
   @override
-  Future delete(String url) async {
+  Future delete(String url, {required Map<String, String> headers}) async {
     dynamic responseJson;
     try {
+      print(url);
       final response = await http
-          .delete(Uri.parse(url))
+          .delete(Uri.parse(url), headers: headers)
           .timeout(const Duration(seconds: 10));
       responseJson = _returnResponse(response);
     } on SocketException {
@@ -47,11 +49,12 @@ class NetworkApiService extends BaseApiServices {
   }
 
   @override
-  Future put(String url, body) async {
+  Future put(String url, dynamic body,
+      {required Map<String, String> headers}) async {
     dynamic responseJson;
     try {
       final response = await http
-          .put(Uri.parse(url), body: body)
+          .put(Uri.parse(url), body: body, headers: headers)
           .timeout(const Duration(seconds: 10));
       responseJson = _returnResponse(response);
     } on SocketException {
@@ -61,7 +64,8 @@ class NetworkApiService extends BaseApiServices {
   }
 
   @override
-  Future patch(String url, body, {required Map<String, String> headers}) async {
+  Future patch(String url, dynamic body,
+      {required Map<String, String> headers}) async {
     dynamic responseJson;
     try {
       final response = await http
@@ -90,7 +94,7 @@ class NetworkApiService extends BaseApiServices {
         throw UnauthorisedException(response.body.toString());
       default:
         throw FetchDataException(
-            'Error occured while Communication with Server with StatusCode : ${response.statusCode}');
+            'Error occurred while Communication with Server with StatusCode : ${response.statusCode}');
     }
   }
 }

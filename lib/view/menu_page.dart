@@ -3,20 +3,31 @@ import 'package:provider/provider.dart';
 import 'package:restaurant_menu/view/menu_item_detail_page.dart';
 import 'package:restaurant_menu/viewmodel/menu_view_model.dart';
 import 'package:sizer/sizer.dart';
-import 'cart_page.dart'; // Import CartPage
+import 'cart_page.dart';
 
-class MenuPage extends StatelessWidget {
+class MenuPage extends StatefulWidget {
+  @override
+  _MenuPageState createState() => _MenuPageState();
+}
+
+class _MenuPageState extends State<MenuPage> {
+  @override
+  void initState() {
+    super.initState();
+    Provider.of<MenuViewModel>(context, listen: false).fetchMenuItems();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blue, // Customize the AppBar background color
+        backgroundColor: Colors.blue,
         title: Padding(
           padding: EdgeInsets.symmetric(horizontal: 2.w),
           child: Text(
             'Restaurant Menu',
             style: TextStyle(
-              fontSize: 14.sp, // Adjust font size for better appearance
+              fontSize: 14.sp,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -58,14 +69,12 @@ class MenuPage extends StatelessWidget {
                 onTap: () {
                   showDialog(
                     context: context,
-                    builder: (context) =>
-                        MenuItemDetailDialog(menuItem: menuItem),
+                    builder: (context) => MenuItemDetailDialog(menuItem: menuItem),
                   );
                 },
                 child: Card(
                   elevation: 5,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15)),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
                   child: Stack(
                     children: [
                       ClipRRect(
@@ -98,7 +107,7 @@ class MenuPage extends StatelessWidget {
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                             ),
-                            SizedBox(height: 0.5.h), // Reduce the height
+                            SizedBox(height: 0.5.h),
                             Text(
                               'Rs. ${menuItem.price?.toStringAsFixed(2) ?? 'N/A'}',
                               style: TextStyle(
@@ -108,7 +117,7 @@ class MenuPage extends StatelessWidget {
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                             ),
-                            SizedBox(height: 0.5.h), // Reduce the height
+                            SizedBox(height: 0.5.h),
                             Expanded(
                               child: Text(
                                 menuItem.description ?? '',
@@ -120,7 +129,7 @@ class MenuPage extends StatelessWidget {
                                 overflow: TextOverflow.ellipsis,
                               ),
                             ),
-                            SizedBox(height: 0.5.h), // Reduce the height
+                            SizedBox(height: 0.5.h),
                             Expanded(
                               child: Text(
                                 menuItem.category ?? '',
@@ -130,23 +139,6 @@ class MenuPage extends StatelessWidget {
                                 ),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                            Align(
-                              alignment: Alignment.bottomRight,
-                              child: IconButton(
-                                icon: Icon(
-                                  Icons.add_circle,
-                                  size: 18.sp,
-                                  color: Colors.white,
-                                ),
-                                onPressed: () {
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) =>
-                                        MenuItemDetailDialog(menuItem: menuItem),
-                                  );
-                                },
                               ),
                             ),
                           ],
